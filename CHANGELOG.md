@@ -3,6 +3,9 @@
 ### 🐛 Bug Fixes
 
 - *(rime_engine)* Arrow key orientation in switcher context
+
+
+
 <a name="1.6.0"></a>
 # 1.6.0 (2026-01-06)
 
