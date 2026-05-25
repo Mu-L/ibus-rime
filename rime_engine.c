@@ -95,9 +95,6 @@ ibus_rime_create_session (IBusRimeEngine *rime_engine)
       g_ibus_rime_settings.preedit_style == PREEDIT_STYLE_COMPOSITION &&
       g_ibus_rime_settings.cursor_type == CURSOR_TYPE_INSERT;
   rime_api->set_option(rime_engine->session_id, "soft_cursor", !inline_caret);
-  // Define arrow key actions in the selector component.
-  Bool horizontal = g_ibus_rime_settings.lookup_table_orientation == IBUS_ORIENTATION_HORIZONTAL;
-  rime_api->set_option(rime_engine->session_id, "_horizontal", horizontal);
 }
 
 static void
@@ -532,6 +529,14 @@ ibus_rime_engine_process_key_event (IBusEngine *engine,
     ibus_rime_engine_update(rime_engine);
     return FALSE;
   }
+
+  // Arrow key actions respect candidate list orientation.
+  Bool horizontal = g_ibus_rime_settings.lookup_table_orientation ==
+                    IBUS_ORIENTATION_HORIZONTAL;
+  if (rime_api->get_option(rime_engine->session_id, "_horizontal") != horizontal) {
+    rime_api->set_option(rime_engine->session_id, "_horizontal", horizontal);
+  }
+
   gboolean result =
       rime_api->process_key(rime_engine->session_id, keyval, modifiers);
   ibus_rime_engine_update(rime_engine);
